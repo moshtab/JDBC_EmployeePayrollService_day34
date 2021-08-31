@@ -15,6 +15,7 @@ public class EmployeePayrollServiceJDBC {
 		showPayrollDataByName();
 		showEmployeesJoinedBetweenDate();
 		findingMinMaxSumAvgCountOfFemailes();
+		insertNewEmployee();
 	}
 
 	private static Connection getSqlConnection() {
@@ -193,7 +194,9 @@ public class EmployeePayrollServiceJDBC {
 					int avgSalary = resultSet.getInt(4);
 					int countSalary = resultSet.getInt(5);
 
-					String row = String.format("User record: \n MinSalary: %d, \n MaxSalary: %d,\n SumSalary: %d,\n AvgSalary: %d,\n CountSalary: %d,", minSalary,maxSalary,sumSalary,avgSalary,countSalary);
+					String row = String.format(
+							"User record: \n MinSalary: %d, \n MaxSalary: %d,\n SumSalary: %d,\n AvgSalary: %d,\n CountSalary: %d,",
+							minSalary, maxSalary, sumSalary, avgSalary, countSalary);
 					System.out.println(row);
 				}
 			}
@@ -209,6 +212,40 @@ public class EmployeePayrollServiceJDBC {
 				}
 			}
 		}
+	}
+
+	private static void insertNewEmployee() {
+		System.out.println("Inserting a new employee to employee_payroll table");
+		Connection conn = getSqlConnection();
+		if (conn != null) {
+			String insertEmp = "INSERT INTO employee_payroll (id,name,salary,startDate,gender) values(?,?,?,?,?)";
+			try {
+				PreparedStatement preparedStatement = conn.prepareStatement(insertEmp);
+				preparedStatement.setInt(1, 5);
+				preparedStatement.setString(2, "Sami");
+				preparedStatement.setInt(3, 90000);
+				preparedStatement.setString(4, "2021-07-01");
+				preparedStatement.setString(5, "M");
+
+				int rowUpdated = preparedStatement.executeUpdate();
+				if (rowUpdated > 0) {
+					System.out.println("Data is Updated");
+				}
+			} catch (SQLException e) {
+
+				e.printStackTrace();
+			} finally {
+				if (conn != null) {
+					try {
+						conn.close();
+					} catch (SQLException sqlException) {
+						System.out.println(sqlException.getMessage());
+
+					}
+				}
+			}
+		}
+
 	}
 
 }

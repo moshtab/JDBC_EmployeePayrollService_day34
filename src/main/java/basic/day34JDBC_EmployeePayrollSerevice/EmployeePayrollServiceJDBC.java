@@ -14,6 +14,7 @@ public class EmployeePayrollServiceJDBC {
 		updateEmployeePayroll();
 		showPayrollDataByName();
 		showEmployeesJoinedBetweenDate();
+		findingMinMaxSumAvgCountOfFemailes();
 	}
 
 	private static Connection getSqlConnection() {
@@ -172,6 +173,42 @@ public class EmployeePayrollServiceJDBC {
 			}
 		}
 
+	}
+
+	private static void findingMinMaxSumAvgCountOfFemailes() {
+		System.out.println("Displaying Min,Max,sum,avg,count of Males and Females");
+		Connection conn = getSqlConnection();
+
+		try {
+			if (conn != null) {
+				String readEmpPayroll = "SELECT min(salary),max(salary),sum(salary),avg(salary),count(salary) FROM employee_payroll WHERE gender = 'M' or gender ='F' group by gender";
+
+				Statement statement = conn.createStatement();
+				ResultSet resultSet = statement.executeQuery(readEmpPayroll);
+				while (resultSet.next()) {
+
+					int minSalary = resultSet.getInt(1);
+					int maxSalary = resultSet.getInt(2);
+					int sumSalary = resultSet.getInt(3);
+					int avgSalary = resultSet.getInt(4);
+					int countSalary = resultSet.getInt(5);
+
+					String row = String.format("User record: \n MinSalary: %d, \n MaxSalary: %d,\n SumSalary: %d,\n AvgSalary: %d,\n CountSalary: %d,", minSalary,maxSalary,sumSalary,avgSalary,countSalary);
+					System.out.println(row);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException sqlException) {
+					System.out.println(sqlException.getMessage());
+
+				}
+			}
+		}
 	}
 
 }

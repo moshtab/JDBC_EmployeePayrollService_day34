@@ -12,7 +12,7 @@ public class EmployeePayrollServiceJDBC {
 		connectionEshtablished();
 		readEmployeePayroll();
 		updateEmployeePayroll();
-
+		showPayrollDataByName();
 	}
 
 	private static Connection getSqlConnection() {
@@ -102,4 +102,42 @@ public class EmployeePayrollServiceJDBC {
 		}
 
 	}
+
+	private static void showPayrollDataByName() {
+		System.out.println("Displaying payroll data by particular name");
+		Connection conn = getSqlConnection();
+
+		try {
+			if (conn != null) {
+				String readEmpPayroll = "SELECT * FROM employee_payroll WHERE name ='Mohsin'";
+
+				Statement statement = conn.createStatement();
+				ResultSet resultSet = statement.executeQuery(readEmpPayroll);
+				while (resultSet.next()) {
+					Integer id = resultSet.getInt(1);
+					String name = resultSet.getString(2);
+					Integer salary = resultSet.getInt(3);
+					String date = resultSet.getString(4);
+					String gender = resultSet.getString(5);
+					String row = String.format(
+							"User record: \n Id: %d, \n Name: %s,\n Salary: %d, \n Date: %s,  \n Gender: %s \n", id,
+							name, salary, date, gender);
+					System.out.println(row);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException sqlException) {
+					System.out.println(sqlException.getMessage());
+
+				}
+			}
+		}
+
+	}
+
 }

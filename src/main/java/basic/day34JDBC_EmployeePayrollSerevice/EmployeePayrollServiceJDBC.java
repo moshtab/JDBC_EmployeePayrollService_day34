@@ -176,7 +176,7 @@ public class EmployeePayrollServiceJDBC {
 
 	}
 
-	private static void findingMinMaxSumAvgCountOfFemailes() {
+	private static void findingMinMaxSumAvgCountOfMalesAndFemales() {
 		System.out.println("Displaying Min,Max,sum,avg,count of Males and Females");
 		Connection conn = getSqlConnection();
 
